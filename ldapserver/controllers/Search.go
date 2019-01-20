@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -33,13 +34,20 @@ func HandleSearch(w ldap.ResponseWriter, m *ldap.Message) {
 
 	username := forward.GetUsernameFromFilter(r.FilterString())
 	usernameSplit := strings.Split(username, "@")
+
+	g.DebugLog(fmt.Sprintf("FilterString: %s", r.FilterString()))
+
 	if len(usernameSplit) == 2 {
+		g.DebugLog(fmt.Sprintf("Username: %s , Domain: %s", usernameSplit[0], usernameSplit[1]))
 		if metadata.InArray(usernameSplit[1], g.Config().Metadata.ServedDomains) {
+			g.DebugLog("Search Location: Seach Backend")
 			results, err = backend.LDAP_Search(r.FilterString(), attributes)
 		} else {
+			g.DebugLog("Search Location: Search Forward")
 			results, err = forward.SearchForward(usernameSplit[0], usernameSplit[1], attributes)
 		}
 	} else {
+		g.DebugLog("Search Location: Search Backend")
 		results, err = backend.LDAP_Search(r.FilterString(), attributes)
 	}
 

@@ -4,6 +4,15 @@ import (
 	"github.com/shanghai-edu/ldaproam/g"
 )
 
+func TranslateAttributes(attributes []string, attributeMap map[string]string) (newAttributes []string) {
+	for _, attr := range attributes {
+		if newAttr, ok := attributeMap[attr]; ok {
+			newAttributes = append(newAttributes, newAttr)
+		}
+	}
+	return
+}
+
 func LDAP_Search(SearchFilter string, attributes []string) (results []LDAP_RESULT, err error) {
 	lc := &LDAP_CONFIG{
 		Addr:       g.Config().Backend.Addr,

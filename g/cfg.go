@@ -12,6 +12,7 @@ import (
 )
 
 type GlobalConfig struct {
+	Debug       bool               `json:"debug"`
 	Backend     *BackendConfig     `json:"backend"`
 	Credentials *CredentialsConfig `json:"credentials"`
 	Metadata    *MetadataConfig    `json:"metadata"`
@@ -126,6 +127,12 @@ func ParseConfig(cfg string) {
 	defer lock.Unlock()
 
 	config = &c
+}
+
+func DebugLog(logstr string) {
+	if Config().Debug {
+		log.Println(logstr)
+	}
 }
 
 func PasseCredentials() {

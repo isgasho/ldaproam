@@ -1,0 +1,49 @@
+{
+	"Debug":false,
+    "backend": {
+        "addr": "ldap-backend:389",
+        "baseDn": "dc=a,dc=example,dc=org",
+        "bindDn": "cn=Manager,dc=a,dc=example,dc=org",
+        "bindPass": "password",
+        "authFilter": "(&(uid=%s))",
+        "attributes": ["uid", "cn", "mail"],
+		"attributesMap":{
+			"uid":"uid",
+			"cn":"cn",
+			"mail":"mail"
+		},
+        "tls":        false,
+        "startTLS":   false
+    },
+    "ldapServer": {
+		"debug":true,
+		"bindDn":"admin",
+		"bindPass":"password",
+		"trustDnCache":{
+			"expired":"24h",
+			"interval":60
+		},
+        "listen": "0.0.0.0:389"
+    },
+	"credentials":{
+		"bits": 2048,
+		"expired":10,
+		"cert":"./server.crt",
+		"key":"./server.key"
+	},
+	"metadata":{
+		"domainName":"ldap.a.example.org",
+		"servedDomains":["a.example.org"],
+		"baseDn":"dc=a,dc=example,dc=org",
+		"description":"This is an example ldap forwarder for alice",
+		"apiAddr":"https://ldap.a.example.org/api/v1",
+		"interval":600,
+		"provider":"http://metadata-provider/metadata.json",
+		"backingFile": "./metadata_all.json"
+		},
+	"http":{
+		"debug":false,
+		"listen":"0.0.0.0",
+		"port":8443
+	}
+}

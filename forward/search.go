@@ -16,15 +16,6 @@ func GetUsernameFromFilter(filter string) (username string) {
 	return
 }
 
-func TranslateAttributes(attributes []string, attributeMap map[string]string) (newAttributes []string) {
-	for _, attr := range attributes {
-		if newAttr, ok := attributeMap[attr]; ok {
-			newAttributes = append(newAttributes, newAttr)
-		}
-	}
-	return
-}
-
 func CreateSearchReq(from, to, username string, attributes []string, privateKey []byte) (error, []byte) {
 	var HttpReq g.HttpSearchReq
 

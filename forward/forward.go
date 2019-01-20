@@ -24,6 +24,18 @@ func translateAttributes(attributes []string, attributeMap map[string]string) (n
 	return
 }
 
+func translateAttributeMap(LdapResutlAttirbutes map[string][]string, attributeMap map[string]string) map[string][]string {
+	newLdapResutlAttirbutes := map[string][]string{}
+	for k, v := range LdapResutlAttirbutes {
+		if newKey, ok := attributeMap[k]; ok {
+			newLdapResutlAttirbutes[newKey] = v
+		} else {
+			newLdapResutlAttirbutes[k] = v
+		}
+	}
+	return newLdapResutlAttirbutes
+}
+
 func BindForward(dn, pass string) (err error) {
 	m, err := metadata.GetMetadataByDn(dn)
 	if err != nil {
@@ -72,6 +84,11 @@ func SearchForward(username string, domain string, attributes []string) (results
 		json.Unmarshal(body, &jss)
 		err = errors.New(jss.Msg)
 		return
+	}
+
+	for i, LdapResult := range js.Result {
+		newAttributes := translateAttributeMap(LdapResult.Attributes, g.Config().Backend.AttributesMap)
+		js.Result[i].Attributes = newAttributes
 	}
 	results = js.Result
 	return

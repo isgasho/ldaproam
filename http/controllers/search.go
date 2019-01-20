@@ -23,6 +23,7 @@ type SearchResult struct {
 func (this *SearchController) Post() {
 	var req g.HttpSearchReq
 	var msgResult MsgResult
+	g.DebugLog(string(this.Ctx.Input.RequestBody))
 	err := json.Unmarshal(this.Ctx.Input.RequestBody, &req)
 	if err != nil {
 		msgResult.Msg = err.Error()

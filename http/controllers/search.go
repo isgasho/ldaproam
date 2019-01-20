@@ -54,7 +54,7 @@ func (this *SearchController) Post() {
 		return
 	}
 
-	res, err := backend.LDAP_SearchUser(req.Body.Data.Username, req.Body.Data.Attributes)
+	res, err := backend.LDAP_SearchUser(req.Body.Data.Username, backend.TranslateAttributes(req.Body.Data.Attributes, g.Config().Backend.AttributesMap))
 	if err != nil {
 		msgResult.Msg = err.Error()
 		this.Data["json"] = msgResult

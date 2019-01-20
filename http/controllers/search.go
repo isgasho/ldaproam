@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/astaxie/beego"
 	"github.com/shanghai-edu/ldaproam/backend"
@@ -20,10 +21,27 @@ type SearchResult struct {
 	Result  []backend.LDAP_RESULT `json:"result"`
 }
 
+func translateAttributeMap(LdapResutlAttirbutes map[string][]string, attributeMap map[string]string) map[string][]string {
+	newMap := map[string]string{}
+	for k, v := range attributeMap {
+		newMap[v] = k
+	}
+
+	newLdapResutlAttirbutes := map[string][]string{}
+	for k, v := range LdapResutlAttirbutes {
+		if newKey, ok := newMap[k]; ok {
+			newLdapResutlAttirbutes[newKey] = v
+		} else {
+			newLdapResutlAttirbutes[k] = v
+		}
+	}
+	return newLdapResutlAttirbutes
+}
+
 func (this *SearchController) Post() {
 	var req g.HttpSearchReq
 	var msgResult MsgResult
-	g.DebugLog(string(this.Ctx.Input.RequestBody))
+	g.DebugLog(fmt.Sprintf("Request on /api/v1/search, req: %s", string(this.Ctx.Input.RequestBody)))
 	err := json.Unmarshal(this.Ctx.Input.RequestBody, &req)
 	if err != nil {
 		msgResult.Msg = err.Error()
@@ -62,6 +80,10 @@ func (this *SearchController) Post() {
 		this.ServeJSON()
 		return
 	}
+	for i, r := range res {
+		res[i].Attributes = translateAttributeMap(r.Attributes, g.Config().Backend.AttributesMap)
+	}
+
 	for i, r := range res {
 		if _, ok := cron.TrustDN.Load(r.DN); ok {
 			continue

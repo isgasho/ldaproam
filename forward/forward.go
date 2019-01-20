@@ -3,6 +3,7 @@ package forward
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/shanghai-edu/ldaproam/backend"
 	"github.com/shanghai-edu/ldaproam/g"
@@ -74,6 +75,7 @@ func SearchForward(username string, domain string, attributes []string) (results
 	if err != nil {
 		return
 	}
+	g.DebugLog(fmt.Sprintf("Forward Search Response: %s", string(body)))
 	var js controllers.SearchResult
 	err = json.Unmarshal(body, &js)
 	if err != nil {
@@ -91,5 +93,6 @@ func SearchForward(username string, domain string, attributes []string) (results
 		js.Result[i].Attributes = newAttributes
 	}
 	results = js.Result
+	g.DebugLog(fmt.Sprintf("Forward Search Result: %s", js.Result))
 	return
 }

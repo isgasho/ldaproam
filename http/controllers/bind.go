@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/astaxie/beego"
 	"github.com/shanghai-edu/ldaproam/backend"
@@ -23,7 +24,7 @@ type MsgResult struct {
 func (this *BindController) Post() {
 	var req g.HttpBindReq
 	var msgResult MsgResult
-	g.DebugLog(string(this.Ctx.Input.RequestBody))
+	g.DebugLog(fmt.Sprintf("Request on /api/v1/bind, req: %s", string(this.Ctx.Input.RequestBody)))
 	err := json.Unmarshal(this.Ctx.Input.RequestBody, &req)
 	if err != nil {
 		msgResult.Msg = err.Error()

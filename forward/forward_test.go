@@ -45,5 +45,10 @@ func Test_TranslateAttributes(t *testing.T) {
 		"cn":   "displayName",
 		"mail": "email",
 	}
+	LdapAttribute := map[string][]string{}
+	LdapAttribute["uid"] = []string{"20150073"}
+	LdapAttribute["cn"] = []string{"冯骐"}
+	LdapAttribute["mail"] = []string{"qfeng@admin.ecnu.edu.cn", "123@qq.com"}
 	t.Log(translateAttributes(attributes, attributeMap))
+	t.Log(translateAttributeMap(LdapAttribute, attributeMap))
 }

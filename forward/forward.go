@@ -10,6 +10,20 @@ import (
 	"github.com/shanghai-edu/ldaproam/metadata"
 )
 
+func translateAttributes(attributes []string, attributeMap map[string]string) (newAttributes []string) {
+	newMap := map[string]string{}
+	for k, v := range attributeMap {
+		newMap[v] = k
+	}
+
+	for _, attr := range attributes {
+		if newAttr, ok := newMap[attr]; ok {
+			newAttributes = append(newAttributes, newAttr)
+		}
+	}
+	return
+}
+
 func BindForward(dn, pass string) (err error) {
 	m, err := metadata.GetMetadataByDn(dn)
 	if err != nil {
@@ -40,7 +54,7 @@ func SearchForward(username string, domain string, attributes []string) (results
 	if err != nil {
 		return
 	}
-	err, SearchReq := CreateSearchReq(g.Config().Metadata.DomainName, m.Entity.DomainName, username, attributes, g.Config().Credentials.PrivateKey)
+	err, SearchReq := CreateSearchReq(g.Config().Metadata.DomainName, m.Entity.DomainName, username, translateAttributes(attributes, g.Config().Backend.AttributesMap), g.Config().Credentials.PrivateKey)
 	if err != nil {
 		return
 	}

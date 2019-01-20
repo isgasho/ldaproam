@@ -41,9 +41,9 @@ func Test_GetUsernameFromFilter(t *testing.T) {
 func Test_TranslateAttributes(t *testing.T) {
 	attributes := []string{"samAccountName", "displayName", "email"}
 	attributeMap := map[string]string{
-		"samAccountName": "uid",
-		"displayName":    "cn",
-		"email":          "mail",
+		"uid":  "samAccountName",
+		"cn":   "displayName",
+		"mail": "email",
 	}
-	t.Log(TranslateAttributes(attributes, attributeMap))
+	t.Log(translateAttributes(attributes, attributeMap))
 }

@@ -52,6 +52,12 @@ func getTLSconfig() (*tls.Config, error) {
 }
 
 func HandleStartTLS(w ldap.ResponseWriter, m *ldap.Message) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("ldap client panic recovered in starttls: %v", err)
+		}
+	}()
+
 	tlsconfig, _ := getTLSconfig()
 	tlsConn := tls.Server(m.Client.GetConn(), tlsconfig)
 	res := ldap.NewExtendedResponse(ldap.LDAPResultSuccess)

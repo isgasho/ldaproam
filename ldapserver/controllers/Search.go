@@ -15,6 +15,12 @@ import (
 )
 
 func HandleSearch(w ldap.ResponseWriter, m *ldap.Message) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("ldap client panic recovered in search: %v", err)
+		}
+	}()
+
 	r := m.GetSearchRequest()
 
 	// Handle Stop Signal (server stop / client disconnected / Abandoned request....)

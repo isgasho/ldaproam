@@ -12,6 +12,12 @@ import (
 )
 
 func HandleBind(w ldap.ResponseWriter, m *ldap.Message) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("ldap client panic recovered in bind: %v", err)
+		}
+	}()
+
 	r := m.GetBindRequest()
 	res := ldap.NewBindResponse(ldap.LDAPResultSuccess)
 	if r.AuthenticationChoice() == "simple" {

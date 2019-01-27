@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/astaxie/beego"
 	"github.com/shanghai-edu/ldaproam/backend"
@@ -19,6 +20,13 @@ type SearchController struct {
 type SearchResult struct {
 	Success bool                  `json:"success"`
 	Result  []backend.LDAP_RESULT `json:"result"`
+}
+
+func getUsernameAttrFromFilter(filter string) (usernameAttr string) {
+	split := strings.Split(filter, "=")
+	split2 := strings.Split(split[0], "(")
+	usernameAttr = split2[len(split2)-1]
+	return
 }
 
 func translateAttributeMap(LdapResutlAttirbutes map[string][]string, attributeMap map[string]string) map[string][]string {
@@ -80,7 +88,9 @@ func (this *SearchController) Post() {
 		this.ServeJSON()
 		return
 	}
+	usernameAttr := getUsernameAttrFromFilter(g.Config().Backend.AuthFilter)
 	for i, r := range res {
+		r.Attributes[usernameAttr][0] = r.Attributes[usernameAttr][0] + domainName
 		res[i].Attributes = translateAttributeMap(r.Attributes, g.Config().Backend.AttributesMap)
 	}
 

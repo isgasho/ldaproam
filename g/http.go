@@ -30,4 +30,5 @@ type SearchReqBody struct {
 type SearchReq struct {
 	Attributes []string `json:"attributes"`
 	Username   string   `json:"username"`
+	Domain     string   `json:"domain"`
 }

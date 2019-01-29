@@ -16,12 +16,13 @@ func GetUsernameFromFilter(filter string) (username string) {
 	return
 }
 
-func CreateSearchReq(from, to, username string, attributes []string, privateKey []byte) (error, []byte) {
+func CreateSearchReq(from, to, username, domain string, attributes []string, privateKey []byte) (error, []byte) {
 	var HttpReq g.HttpSearchReq
 
 	HttpReq.Body.From = from
 	HttpReq.Body.To = to
 	HttpReq.Body.Data.Username = username
+	HttpReq.Body.Data.Domain = domain
 	HttpReq.Body.Data.Attributes = attributes
 
 	b, err := json.Marshal(HttpReq.Body)

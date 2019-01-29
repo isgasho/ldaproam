@@ -67,7 +67,7 @@ func SearchForward(username string, domain string, attributes []string) (results
 	if err != nil {
 		return
 	}
-	err, SearchReq := CreateSearchReq(g.Config().Metadata.DomainName, m.Entity.DomainName, username, translateAttributes(attributes, g.Config().Backend.AttributesMap), g.Config().Credentials.PrivateKey)
+	err, SearchReq := CreateSearchReq(g.Config().Metadata.DomainName, m.Entity.DomainName, username, domain, translateAttributes(attributes, g.Config().Backend.AttributesMap), g.Config().Credentials.PrivateKey)
 	if err != nil {
 		return
 	}

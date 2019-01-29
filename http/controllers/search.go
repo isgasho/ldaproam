@@ -90,7 +90,7 @@ func (this *SearchController) Post() {
 	}
 	usernameAttr := getUsernameAttrFromFilter(g.Config().Backend.AuthFilter)
 	for i, r := range res {
-		r.Attributes[usernameAttr][0] = r.Attributes[usernameAttr][0] + domainName
+		r.Attributes[usernameAttr][0] = r.Attributes[usernameAttr][0] + "@" + req.Body.Data.Domain
 		res[i].Attributes = translateAttributeMap(r.Attributes, g.Config().Backend.AttributesMap)
 	}
 
